@@ -4,6 +4,15 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" basic setups"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set foldmethod=syntax
+set foldnestmax=10
+set nofoldenable
+set foldlevel=2
+
+
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " the useful keymappings
 """""""""""""""""""""""""""""""""""""""""""""""""" 
@@ -11,6 +20,23 @@ call vundle#rc()
 nnoremap <leader>class :read ~/CppTemplates/class.cpp<cr>A<space>
 nnoremap <leader>for :read ~/CppTemplates/for.cpp<cr>f*xi
 nnoremap <leader>icld :read ~/CppTemplates/include.cpp<cr>a
+nnoremap <leader>com :II//<Esc>
+" autocompletion of brackets
+inoremap { {}<Esc>i
+inoremap ( ()<Esc>i
+inoremap " ""<Esc>i
+"comment and uncomment"
+vnoremap <leader>c 0I//<Esc>
+
+
+function! s:insert_gates()
+	let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g")
+	execute "normal! i#ifndef " . gatename
+	execute "normal! o#define " . gatename
+	execute "normal! Go#endif /* " .gatename . " */"
+	normal! kk
+endfunction
+autocmd BufNewFile *.{h,hpp} call <SID>insert_gates()
 
 " let Vundle manage Vundle
 " required!
